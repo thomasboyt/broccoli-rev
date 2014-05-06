@@ -14,6 +14,7 @@ function Rev(inputTree, options) {
 
   this.hashLength = options.hashLength || 8;
   this.manifestFile = options.manifestFile || '/rev-manifest.json';
+  this.useBroccoliTmpDir = options.useBroccoliTmpDir !== undefined ? options.useBroccoliTmpDir : true;
   this.inputTree = inputTree;
 }
 
@@ -53,7 +54,11 @@ Rev.prototype.write = function (readTree, destDir) {
 
     var manifestJson = JSON.stringify(manifestMap, null, 2);
 
-    fs.writeFileSync(path.join(destDir, manifestFile), manifestJson);
+    if (this.useBroccoliTmpDir) {
+      fs.writeFileSync(path.join(destDir, manifestFile), manifestJson);
+    } else {
+      fs.writeFileSync(manifestFile, manifestJson);
+    }
   });
 };
 
